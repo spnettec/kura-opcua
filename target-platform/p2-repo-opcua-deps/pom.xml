@@ -41,12 +41,10 @@
                         <configuration>
                             <artifacts>
                                 <!--
-                                    kura-opcua-exclusive deps. Anything monorepo's
-                                    target-platform/p2-repo-equinox already converts
+                                    kura-opcua-exclusive deps. Everything else
                                     (netty, guava, bouncycastle, jakarta XML, jaxb-osgi)
-                                    is consumed via the Profile location to
-                                    .../kura/target-platform/p2-repo-{equinox,extra,common}
-                                    declared in target-definition/kura-opcua.target.
+                                    is in monorepo's target-platform-pde-deps and
+                                    consumed via Maven location in kura-opcua.target.
 
                                     Future addons or version bumps that monorepo doesn't
                                     ship — slot them in here.
@@ -70,6 +68,18 @@
                                 </artifact>
                                 <artifact>
                                     <id>org.eclipse.milo:milo-transport:jar:${org.eclipse.milo.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+
+                                <!-- Digital Petri FSM — milo client transitive. -->
+                                <artifact>
+                                    <id>com.digitalpetri.fsm:strict-machine:${com.digitalpetri.strict-machine.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>com.digitalpetri.netty:netty-channel-fsm:${com.digitalpetri.channel-fsm.version}</id>
                                     <source>true</source>
                                     <transitive>false</transitive>
                                 </artifact>

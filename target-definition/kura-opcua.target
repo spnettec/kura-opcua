@@ -14,37 +14,74 @@
      Eurotech
 
 -->
-<target name="kura-opcua Target Definition" sequenceNumber="79">
+<target name="kura-opcua Target Definition" sequenceNumber="81">
     <locations>
-        <!-- kura-opcua-specific bundles produced by ../target-platform/p2-repo-opcua-deps. -->
-        <location path="/Users/heyoulin/iot-kura-develop/git/kura-opcua/target-platform/p2-repo-opcua-deps/target/repository" type="Profile"/>
+        <!--
+            Single Maven location, no Profile location with absolute paths. All
+            bundles are resolved from ~/.m2:
+              - kura-bom: kura framework bundles (org.eclipse.kura.api, .core, …)
+                that opcua depends on, by name.
+              - target-platform-pde-deps: 211 P2 third-party bundles (netty, guava,
+                bouncycastle, jakarta, etc.) — produced by the monorepo's
+                target-platform/p2-repo-{equinox,extra,common} reficio, parked in
+                ~/.m2 under p2.osgi.bundle/* by install-to-m2.sh.
+              - p2.osgi.bundle:org.eclipse.milo.* + com.digitalpetri.* — opcua-
+                exclusive bundles produced by THIS sibling's target-platform reficio.
 
-        <!-- Reuse the kura framework's pre-built p2 repos for kura.api transitives
-             (javax.comm, commons.io, slf4j, etc.). Built once by:
-                 mvn -f kura/target-platform/pom.xml install
-             Hardcoded paths because eclipse pde target files don't support relative-to-cwd. -->
-        <location path="/Users/heyoulin/iot-kura-develop/git/kura/target-platform/p2-repo-equinox/target/repository" type="Profile"/>
-        <location path="/Users/heyoulin/iot-kura-develop/git/kura/target-platform/p2-repo-extra/target/repository" type="Profile"/>
-        <location path="/Users/heyoulin/iot-kura-develop/git/kura/target-platform/p2-repo-common/target/repository" type="Profile"/>
-
+            Setup (once per fresh ~/.m2):
+                mvn -f kura/target-platform/pom.xml install
+                mvn -f kura-opcua/target-platform/pom.xml install
+            then any kura-opcua reactor build resolves on any machine with no
+            hardcoded paths.
+        -->
         <location includeDependencyDepth="direct" includeDependencyScopes="compile,test"
             missingManifest="ignore" type="Maven">
 
             <dependencies>
                 <dependency>
                     <groupId>org.eclipse.kura</groupId>
-                    <artifactId>target-platform-pde-deps</artifactId>
+                    <artifactId>kura-bom</artifactId>
                     <version>6.0.0-SNAPSHOT</version>
                     <type>pom</type>
                 </dependency>
                 <dependency>
                     <groupId>org.eclipse.kura</groupId>
-                    <artifactId>kura-pde-deps</artifactId>
+                    <artifactId>target-platform-pde-deps</artifactId>
                     <version>6.0.0-SNAPSHOT</version>
                     <type>pom</type>
                 </dependency>
 
-                <!-- opcua-specific deps come from the Profile location above. -->
+                <!-- opcua-exclusive bundles (sibling reficio output). -->
+                <dependency>
+                    <groupId>p2.osgi.bundle</groupId>
+                    <artifactId>org.eclipse.milo.sdk-client</artifactId>
+                    <version>1.1.2</version>
+                </dependency>
+                <dependency>
+                    <groupId>p2.osgi.bundle</groupId>
+                    <artifactId>org.eclipse.milo.sdk-core</artifactId>
+                    <version>1.1.2</version>
+                </dependency>
+                <dependency>
+                    <groupId>p2.osgi.bundle</groupId>
+                    <artifactId>org.eclipse.milo.stack-core</artifactId>
+                    <version>1.1.2</version>
+                </dependency>
+                <dependency>
+                    <groupId>p2.osgi.bundle</groupId>
+                    <artifactId>org.eclipse.milo.transport</artifactId>
+                    <version>1.1.2</version>
+                </dependency>
+                <dependency>
+                    <groupId>p2.osgi.bundle</groupId>
+                    <artifactId>com.digitalpetri.fsm.strict-machine</artifactId>
+                    <version>1.0.0</version>
+                </dependency>
+                <dependency>
+                    <groupId>p2.osgi.bundle</groupId>
+                    <artifactId>com.digitalpetri.netty.channel-fsm</artifactId>
+                    <version>1.0.2</version>
+                </dependency>
             </dependencies>
 
             <repositories>
@@ -59,18 +96,8 @@
                     <url>https://repo.eclipse.org/content/repositories/kura-snapshots/</url>
                 </repository>
                 <repository>
-                    <id>kura-addons</id>
-                    <name>Kura Addons Maven Repository</name>
-                    <url>https://raw.githubusercontent.com/eurotech/kura_addons/mvn-repo</url>
-                </repository>
-                <repository>
                     <id>central</id>
                     <url>https://repo1.maven.org/maven2/</url>
-                </repository>
-                <repository>
-                    <!-- moquette-broker -->
-                    <id>jitpack.io</id>
-                    <url>https://jitpack.io</url>
                 </repository>
             </repositories>
         </location>

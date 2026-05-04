@@ -33,8 +33,10 @@
 
         <!-- Versions for kura-opcua-exclusive deps. Versions for shared deps
              (netty, guava, bouncycastle, jakarta) are pinned by monorepo's
-             target-platform/p2-repo-equinox and consumed via Profile location. -->
+             target-platform-pde-deps and consumed via Maven location. -->
         <org.eclipse.milo.version>1.1.2</org.eclipse.milo.version>
+        <com.digitalpetri.strict-machine.version>1.0.0</com.digitalpetri.strict-machine.version>
+        <com.digitalpetri.channel-fsm.version>1.0.2</com.digitalpetri.channel-fsm.version>
     </properties>
 
     <modules>
