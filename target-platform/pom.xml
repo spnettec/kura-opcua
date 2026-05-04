@@ -31,14 +31,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <p2-maven-plugin.version>2.1.0</p2-maven-plugin.version>
 
+        <!-- Versions for kura-opcua-exclusive deps. Versions for shared deps
+             (netty, guava, bouncycastle, jakarta) are pinned by monorepo's
+             target-platform/p2-repo-equinox and consumed via Profile location. -->
         <org.eclipse.milo.version>1.1.2</org.eclipse.milo.version>
-        <io.netty.version>4.2.12.Final</io.netty.version>
-        <guava.version>33.4.0-jre</guava.version>
-        <failureaccess.version>1.0.2</failureaccess.version>
-        <org.bouncycastle.version>1.84</org.bouncycastle.version>
-        <jakarta.activation-api.version>2.1.2</jakarta.activation-api.version>
-        <jakarta.xml.bind-api.version>4.0.2</jakarta.xml.bind-api.version>
-        <jaxb-osgi.version>4.0.2</jaxb-osgi.version>
     </properties>
 
     <modules>

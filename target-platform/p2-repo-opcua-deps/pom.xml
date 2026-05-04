@@ -40,7 +40,19 @@
                         </goals>
                         <configuration>
                             <artifacts>
-                                <!-- Eclipse Milo 1.1.2 — already valid OSGi bundles. -->
+                                <!--
+                                    kura-opcua-exclusive deps. Anything monorepo's
+                                    target-platform/p2-repo-equinox already converts
+                                    (netty, guava, bouncycastle, jakarta XML, jaxb-osgi)
+                                    is consumed via the Profile location to
+                                    .../kura/target-platform/p2-repo-{equinox,extra,common}
+                                    declared in target-definition/kura-opcua.target.
+
+                                    Future addons or version bumps that monorepo doesn't
+                                    ship — slot them in here.
+                                -->
+
+                                <!-- Eclipse Milo 1.1.2 — only opcua bundle uses it. -->
                                 <artifact>
                                     <id>org.eclipse.milo:milo-sdk-client:jar:${org.eclipse.milo.version}</id>
                                     <source>true</source>
@@ -58,114 +70,6 @@
                                 </artifact>
                                 <artifact>
                                     <id>org.eclipse.milo:milo-transport:jar:${org.eclipse.milo.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-
-                                <!-- Netty 4.2 — bundle imports io.netty.* directly. -->
-                                <artifact>
-                                    <id>io.netty:netty-buffer:${io.netty.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>io.netty:netty-codec:${io.netty.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>io.netty:netty-codec-base:${io.netty.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>io.netty:netty-common:${io.netty.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>io.netty:netty-handler:${io.netty.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>io.netty:netty-resolver:${io.netty.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>io.netty:netty-transport:${io.netty.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>io.netty:netty-transport-classes-epoll:${io.netty.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>io.netty:netty-transport-classes-kqueue:${io.netty.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>io.netty:netty-transport-native-epoll:${io.netty.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>io.netty:netty-transport-native-kqueue:${io.netty.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>io.netty:netty-transport-native-unix-common:${io.netty.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-
-                                <!-- Guava — bundle imports com.google.common.* directly. -->
-                                <artifact>
-                                    <id>com.google.guava:guava:${guava.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>com.google.guava:failureaccess:${failureaccess.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-
-                                <!-- BouncyCastle — milo crypto runtime dep. -->
-                                <artifact>
-                                    <id>org.bouncycastle:bcpkix-jdk18on:${org.bouncycastle.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>org.bouncycastle:bcprov-jdk18on:${org.bouncycastle.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>org.bouncycastle:bcutil-jdk18on:${org.bouncycastle.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-
-                                <!-- Jakarta XML — milo runtime dep for XML structures. -->
-                                <artifact>
-                                    <id>jakarta.activation:jakarta.activation-api:jar:${jakarta.activation-api.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>jakarta.xml.bind:jakarta.xml.bind-api:jar:${jakarta.xml.bind-api.version}</id>
-                                    <source>true</source>
-                                    <transitive>false</transitive>
-                                </artifact>
-                                <artifact>
-                                    <id>com.sun.xml.bind:jaxb-osgi:${jaxb-osgi.version}</id>
                                     <source>true</source>
                                     <transitive>false</transitive>
                                 </artifact>
