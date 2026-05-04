@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Copyright (c) 2025, 2026 Eurotech and/or its affiliates and others
+    Copyright (c) 2026 YOFC
+
+    This program and the accompanying materials are made
+    available under the terms of the Eclipse Public License 2.0
+    which is available at https://www.eclipse.org/legal/epl-2.0/
+
+    SPDX-License-Identifier: EPL-2.0
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.eclipse.kura</groupId>
+        <artifactId>kura-opcua-target-platform</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>p2-repo-opcua-deps</artifactId>
+    <packaging>pom</packaging>
+    <name>P2 site for kura-opcua-specific deps</name>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.reficio</groupId>
+                <artifactId>p2-maven-plugin</artifactId>
+                <version>${p2-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-p2-site</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>site</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <!-- Eclipse Milo 1.1.2 — already valid OSGi bundles. -->
+                                <artifact>
+                                    <id>org.eclipse.milo:milo-sdk-client:jar:${org.eclipse.milo.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>org.eclipse.milo:milo-sdk-core:jar:${org.eclipse.milo.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>org.eclipse.milo:milo-stack-core:jar:${org.eclipse.milo.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>org.eclipse.milo:milo-transport:jar:${org.eclipse.milo.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+
+                                <!-- Netty 4.2 — bundle imports io.netty.* directly. -->
+                                <artifact>
+                                    <id>io.netty:netty-buffer:${io.netty.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>io.netty:netty-codec:${io.netty.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>io.netty:netty-codec-base:${io.netty.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>io.netty:netty-common:${io.netty.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>io.netty:netty-handler:${io.netty.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>io.netty:netty-resolver:${io.netty.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>io.netty:netty-transport:${io.netty.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>io.netty:netty-transport-classes-epoll:${io.netty.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>io.netty:netty-transport-classes-kqueue:${io.netty.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>io.netty:netty-transport-native-epoll:${io.netty.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>io.netty:netty-transport-native-kqueue:${io.netty.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>io.netty:netty-transport-native-unix-common:${io.netty.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+
+                                <!-- Guava — bundle imports com.google.common.* directly. -->
+                                <artifact>
+                                    <id>com.google.guava:guava:${guava.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>com.google.guava:failureaccess:${failureaccess.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+
+                                <!-- BouncyCastle — milo crypto runtime dep. -->
+                                <artifact>
+                                    <id>org.bouncycastle:bcpkix-jdk18on:${org.bouncycastle.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>org.bouncycastle:bcprov-jdk18on:${org.bouncycastle.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>org.bouncycastle:bcutil-jdk18on:${org.bouncycastle.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+
+                                <!-- Jakarta XML — milo runtime dep for XML structures. -->
+                                <artifact>
+                                    <id>jakarta.activation:jakarta.activation-api:jar:${jakarta.activation-api.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>jakarta.xml.bind:jakarta.xml.bind-api:jar:${jakarta.xml.bind-api.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                                <artifact>
+                                    <id>com.sun.xml.bind:jaxb-osgi:${jaxb-osgi.version}</id>
+                                    <source>true</source>
+                                    <transitive>false</transitive>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>install-p2-bundles-to-local-m2</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <exec executable="${project.basedir}/../install-to-m2.sh"
+                                      dir="${project.basedir}"
+                                      failonerror="true">
+                                    <arg value="${project.build.directory}/repository/plugins" />
+                                    <arg value="p2.osgi.bundle" />
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+    </repositories>
+</project>

@@ -14,8 +14,19 @@
      Eurotech
 
 -->
-<target name="kura-opcua Target Definition" sequenceNumber="75">
+<target name="kura-opcua Target Definition" sequenceNumber="79">
     <locations>
+        <!-- kura-opcua-specific bundles produced by ../target-platform/p2-repo-opcua-deps. -->
+        <location path="/Users/heyoulin/iot-kura-develop/git/kura-opcua/target-platform/p2-repo-opcua-deps/target/repository" type="Profile"/>
+
+        <!-- Reuse the kura framework's pre-built p2 repos for kura.api transitives
+             (javax.comm, commons.io, slf4j, etc.). Built once by:
+                 mvn -f kura/target-platform/pom.xml install
+             Hardcoded paths because eclipse pde target files don't support relative-to-cwd. -->
+        <location path="/Users/heyoulin/iot-kura-develop/git/kura/target-platform/p2-repo-equinox/target/repository" type="Profile"/>
+        <location path="/Users/heyoulin/iot-kura-develop/git/kura/target-platform/p2-repo-extra/target/repository" type="Profile"/>
+        <location path="/Users/heyoulin/iot-kura-develop/git/kura/target-platform/p2-repo-common/target/repository" type="Profile"/>
+
         <location includeDependencyDepth="direct" includeDependencyScopes="compile,test"
             missingManifest="ignore" type="Maven">
 
@@ -32,6 +43,8 @@
                     <version>6.0.0-SNAPSHOT</version>
                     <type>pom</type>
                 </dependency>
+
+                <!-- opcua-specific deps come from the Profile location above. -->
             </dependencies>
 
             <repositories>
