@@ -15,12 +15,12 @@ package org.eclipse.kura.internal.driver.opcua;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
@@ -33,11 +33,11 @@ import org.eclipse.kura.internal.driver.opcua.request.SingleNodeListenParams;
 
 public class ListenerRegistrationRegistry {
 
-    private final Map<ListenParams, Collection<ListenRequest>> registeredListeners = new HashMap<>();
+    private final Map<ListenParams, Collection<ListenRequest>> registeredListeners = new ConcurrentHashMap<>();
     private final List<Listener> itemListeners = new CopyOnWriteArrayList<>();
     private long state;
 
-    public synchronized void registerListeners(final Collection<ListenRequest> requests) {
+    public void registerListeners(final Collection<ListenRequest> requests) {
         boolean subscriptionsChanged = false;
         for (final ListenRequest request : requests) {
             subscriptionsChanged |= registerListenerInternal(request);
@@ -47,7 +47,7 @@ public class ListenerRegistrationRegistry {
         }
     }
 
-    public synchronized void unregisterListeners(final Collection<ChannelListener> listeners) {
+    public void unregisterListeners(final Collection<ChannelListener> listeners) {
         boolean subscriptionsChanged = false;
         for (final ChannelListener listener : listeners) {
             subscriptionsChanged |= unregisterListenerInternal(listener);
@@ -57,13 +57,13 @@ public class ListenerRegistrationRegistry {
         }
     }
 
-    public synchronized void registerListener(final ListenRequest request) {
+    public void registerListener(final ListenRequest request) {
         if (registerListenerInternal(request)) {
             notifyChanged();
         }
     }
 
-    public synchronized void unregisterListener(final ChannelListener listener) {
+    public void unregisterListener(final ChannelListener listener) {
         if (unregisterListenerInternal(listener)) {
             notifyChanged();
         }
@@ -112,7 +112,7 @@ public class ListenerRegistrationRegistry {
         this.itemListeners.forEach(Listener::onRegistrationsChanged);
     }
 
-    public synchronized void computeDifferences(final Set<ListenParams> other, final Consumer<ListenParams> toBeCreated,
+    public void computeDifferences(final Set<ListenParams> other, final Consumer<ListenParams> toBeCreated,
             final Consumer<ListenParams> toBeDeleted) {
         final Set<ListenParams> currentItems = this.registeredListeners.keySet();
         for (final ListenParams params : currentItems) {
@@ -135,15 +135,15 @@ public class ListenerRegistrationRegistry {
         return Collections.unmodifiableSet(this.registeredListeners.keySet());
     }
 
-    public synchronized boolean isEmpty() {
+    public boolean isEmpty() {
         return this.registeredListeners.isEmpty();
     }
 
-    public synchronized void addRegistrationItemListener(final Listener listener) {
+    public void addRegistrationItemListener(final Listener listener) {
         this.itemListeners.add(listener);
     }
 
-    public synchronized void removeRegistrationItemListener(final Listener listener) {
+    public void removeRegistrationItemListener(final Listener listener) {
         this.itemListeners.remove(listener);
     }
 

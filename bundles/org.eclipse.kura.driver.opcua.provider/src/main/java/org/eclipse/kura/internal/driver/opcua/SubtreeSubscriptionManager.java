@@ -56,7 +56,9 @@ public class SubtreeSubscriptionManager implements ListenerRegistrationRegistry.
         this.client = client;
         this.registrations = registrations;
         this.subtreeRegistrations = new ListenerRegistrationRegistry();
-        this.subscriptionManager = new SubscriptionManager(options, client, queue, this.subtreeRegistrations);
+        this.subscriptionManager = new SubscriptionManager(options, client, queue, this.subtreeRegistrations,
+                () -> {
+                });
         this.channelNameFormat = options.getSubtreeSubscriptionChannelNameFormat();
 
         synchronized (this) {
@@ -151,8 +153,7 @@ public class SubtreeSubscriptionManager implements ListenerRegistrationRegistry.
         return this.isClosed;
     }
 
-    private TreeVisit visitSubtree(final SingleNodeListenParams rootParams,
-            final BiConsumer<String, NodeId> visitor) {
+    private TreeVisit visitSubtree(final SingleNodeListenParams rootParams, final BiConsumer<String, NodeId> visitor) {
         final TreeVisit visit = new TreeVisit(this.client, rootParams.getReadValueId().getNodeId(), visitor);
 
         visit.run();

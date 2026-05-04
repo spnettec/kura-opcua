@@ -16,12 +16,17 @@ package org.eclipse.kura.internal.driver.opcua;
 import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.eclipse.kura.channel.ChannelRecord;
 import org.eclipse.kura.channel.listener.ChannelListener;
@@ -70,8 +75,13 @@ public final class OpcUaDriver implements Driver, ConfigurableComponent {
     private CryptoService cryptoService;
     private OpcUaOptions options;
     private long connectAttempt = 0;
+    private int autoConnectAttempt = 0;
+
+    protected ScheduledExecutorService connectionMonitorExecutor;
+    private ScheduledFuture<?> connectionMonitorFuture;
 
     protected synchronized void activate(final Map<String, Object> properties) {
+        this.connectionMonitorExecutor = Executors.newSingleThreadScheduledExecutor();
         logger.info("Activating OPC-UA Driver...");
         extractProperties(properties);
         logger.info("Activating OPC-UA Driver... Done");
@@ -89,13 +99,22 @@ public final class OpcUaDriver implements Driver, ConfigurableComponent {
         }
     }
 
-    protected synchronized CompletableFuture<ConnectionManager> connectAsync() {
+    protected CompletableFuture<ConnectionManager> connectAsync() {
         if (this.connectionManager.isPresent()) {
             return CompletableFuture.completedFuture(this.connectionManager.get());
         }
+        return connectAsyncInternal();
+    }
+
+    private synchronized CompletableFuture<ConnectionManager> connectAsyncInternal() {
+        if (this.connectionManager.isPresent()) {
+            return CompletableFuture.completedFuture(this.connectionManager.get());
+        }
+
         if (this.connectTask.isPresent() && !this.connectTask.get().isDone()) {
             return this.connectTask.get();
         }
+
         this.connectAttempt++;
         final long currentConnectAttempt = this.connectAttempt;
         final CompletableFuture<ConnectionManager> currentConnectTask = ConnectionManager.connect(this.options,
@@ -120,7 +139,10 @@ public final class OpcUaDriver implements Driver, ConfigurableComponent {
     protected ConnectionManager connectSync() throws ConnectionException {
         try {
             return connectAsync().get(this.options.getRequestTimeout(), TimeUnit.SECONDS);
-        } catch (final Exception e) {
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new ConnectionException(e);
+        } catch (Exception e) {
             throw new ConnectionException(e);
         }
     }
@@ -130,10 +152,11 @@ public final class OpcUaDriver implements Driver, ConfigurableComponent {
         connectSync();
     }
 
-    protected synchronized void deactivate() {
+    protected void deactivate() {
         logger.info("Deactivating OPC-UA Driver...");
         try {
             disconnect();
+            this.connectionMonitorExecutor.shutdownNow();
         } catch (final ConnectionException e) {
             logger.error("Error while disconnecting....", e);
         }
@@ -153,6 +176,8 @@ public final class OpcUaDriver implements Driver, ConfigurableComponent {
             }
         } catch (Exception e) {
             throw new ConnectionException(e);
+        } finally {
+            stopConnectionMonitorTask();
         }
     }
 
@@ -191,24 +216,31 @@ public final class OpcUaDriver implements Driver, ConfigurableComponent {
 
     /** {@inheritDoc} */
     @Override
-    public void registerChannelListener(final Map<String, Object> channelConfig, final ChannelListener listener)
+    public void registerChannelListeners(final Map<ChannelListener, Map<String, Object>> listenerChannelConfigs)
             throws ConnectionException {
-        final ListenRequest listenRequest = ListenRequest.extractListenRequest(channelConfig, listener);
+        List<ListenRequest> listenRequests = listenerChannelConfigs.entrySet().stream()
+                .map(lc -> ListenRequest.extractListenRequest(lc.getValue(), lc.getKey())).collect(Collectors.toList());
+        List<ListenRequest> treeListenRequests = listenRequests.stream()
+                .filter(req -> req.getParameters() instanceof TreeListenParams).collect(Collectors.toList());
+        List<ListenRequest> nodeListenRequests = listenRequests.stream()
+                .filter(req -> !(req.getParameters() instanceof TreeListenParams)).collect(Collectors.toList());
 
-        if (listenRequest.getParameters() instanceof TreeListenParams) {
-            this.subtreeListenerRegistrations.registerListener(listenRequest);
-        } else {
-            this.nodeListeneresRegistrations.registerListener(listenRequest);
+        if (!treeListenRequests.isEmpty()) {
+            this.subtreeListenerRegistrations.registerListeners(treeListenRequests);
+        }
+        if (!nodeListenRequests.isEmpty()) {
+            this.nodeListeneresRegistrations.registerListeners(nodeListenRequests);
         }
 
         connectAsync();
+        startConnectionMonitorTask();
     }
 
     /** {@inheritDoc} */
     @Override
-    public void unregisterChannelListener(final ChannelListener listener) throws ConnectionException {
-        this.nodeListeneresRegistrations.unregisterListener(listener);
-        this.subtreeListenerRegistrations.unregisterListener(listener);
+    public void unregisterChannelListeners(final Collection<ChannelListener> listeners) throws ConnectionException {
+        this.nodeListeneresRegistrations.unregisterListeners(listeners);
+        this.subtreeListenerRegistrations.unregisterListeners(listeners);
     }
 
     /**
@@ -217,7 +249,7 @@ public final class OpcUaDriver implements Driver, ConfigurableComponent {
      * @param properties
      *            the properties
      */
-    public synchronized void updated(final Map<String, Object> properties) {
+    public void updated(final Map<String, Object> properties) {
         logger.info("Updating OPC-UA Driver...");
 
         extractProperties(properties);
@@ -236,13 +268,15 @@ public final class OpcUaDriver implements Driver, ConfigurableComponent {
         logger.info("Updating OPC-UA Driver... Done");
     }
 
-    private synchronized void onFailure(final ConnectionManager manager, final Throwable ex) {
+    private void onFailure(final ConnectionManager manager, final Throwable ex) {
         if (this.connectionManager.isPresent() && this.connectionManager.get() == manager) {
             logger.debug("Unrecoverable failure, forcing disconnect", ex);
             try {
                 disconnect();
             } catch (ConnectionException e) {
                 logger.warn("Unable to Disconnect...");
+            } finally {
+                startConnectionMonitorTask();
             }
         } else {
             logger.debug("Ignoring failure from old connection", ex);
@@ -254,6 +288,48 @@ public final class OpcUaDriver implements Driver, ConfigurableComponent {
         requireNonNull(channelRecords, "Channel Record list cannot be null");
 
         return new OpcUaPreparedRead(Request.extractReadRequests(channelRecords), channelRecords);
+    }
+
+    private synchronized void startConnectionMonitorTask() {
+        if (this.connectionMonitorFuture != null && !this.connectionMonitorFuture.isDone()) {
+            return;
+        }
+        this.connectionMonitorFuture = this.connectionMonitorExecutor.scheduleAtFixedRate(() -> {
+
+            String originalName = Thread.currentThread().getName();
+            Thread.currentThread().setName("OpcUaDriver:ReconnectTask");
+            try {
+                if (!OpcUaDriver.this.connectionManager.isPresent()) {
+                    connectAsync();
+                    OpcUaDriver.this.autoConnectAttempt++;
+                }
+            } catch (Exception e) {
+                logger.warn("Connect failed", e);
+            } finally {
+                Thread.currentThread().setName(originalName);
+                if (OpcUaDriver.this.connectionManager.isPresent()) {
+                    OpcUaDriver.this.autoConnectAttempt = 0;
+                    logger.info("Connected. Reconnect task will be terminated.");
+                    throw new RuntimeException("OpcUaDriver Connected. Reconnect task will be terminated.");
+                } else {
+                    if (OpcUaDriver.this.autoConnectAttempt > OpcUaDriver.this.options.getMaxConnectRetry()) {
+                        logger.error("Auto connect retry {} times. Reconnect task will be terminated.",
+                                OpcUaDriver.this.autoConnectAttempt);
+                        throw new RuntimeException("Auto connect retry. Reconnect task will be terminated.");
+                    }
+                }
+            }
+
+        }, 10, 10, TimeUnit.SECONDS);
+    }
+
+    private synchronized void stopConnectionMonitorTask() {
+        if (this.connectionMonitorFuture != null && !this.connectionMonitorFuture.isDone()) {
+
+            logger.info("Reconnect task running. Stopping it");
+
+            this.connectionMonitorFuture.cancel(true);
+        }
     }
 
     private class OpcUaPreparedRead implements PreparedRead {

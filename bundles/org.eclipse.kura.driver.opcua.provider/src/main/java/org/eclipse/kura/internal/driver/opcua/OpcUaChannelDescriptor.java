@@ -77,18 +77,18 @@ public final class OpcUaChannelDescriptor implements ChannelDescriptor {
         final List<Tad> elements = CollectionUtil.newArrayList();
 
         final Tad nodeId = new Tad();
-        nodeId.setName(NODE_ID_PROP_NAME);
+        nodeId.setName("%" + NODE_ID_PROP_NAME);
         nodeId.setId(NODE_ID_PROP_NAME);
-        nodeId.setDescription(NODE_ID_PROP_NAME);
+        nodeId.setDescription("%" + NODE_ID_PROP_NAME + "Desc");
         nodeId.setType(Tscalar.STRING);
         nodeId.setRequired(true);
         nodeId.setDefault(NODE_ID_DEFAULT);
         elements.add(nodeId);
 
         final Tad namespaceIndex = new Tad();
-        namespaceIndex.setName(NODE_NAMESPACE_INDEX_PROP_NAME);
+        namespaceIndex.setName("%" + NODE_NAMESPACE_INDEX_PROP_NAME);
         namespaceIndex.setId(NODE_NAMESPACE_INDEX_PROP_NAME);
-        namespaceIndex.setDescription(NODE_NAMESPACE_INDEX_PROP_NAME);
+        namespaceIndex.setDescription("%" + NODE_NAMESPACE_INDEX_PROP_NAME + "Desc");
         namespaceIndex.setType(Tscalar.INTEGER);
         namespaceIndex.setRequired(true);
         namespaceIndex.setDefault(NODE_NAMESPACE_INDEX_DEFAULT);
@@ -96,9 +96,9 @@ public final class OpcUaChannelDescriptor implements ChannelDescriptor {
         elements.add(namespaceIndex);
 
         final Tad opcuaType = new Tad();
-        opcuaType.setName(OPCUA_TYPE_PROP_NAME);
+        opcuaType.setName("%" + OPCUA_TYPE_PROP_NAME);
         opcuaType.setId(OPCUA_TYPE_PROP_NAME);
-        opcuaType.setDescription(OPCUA_TYPE_PROP_NAME);
+        opcuaType.setDescription("%" + OPCUA_TYPE_PROP_NAME + "Desc");
         opcuaType.setType(Tscalar.STRING);
         opcuaType.setRequired(true);
         opcuaType.setDefault(OPCUA_TYPE_DEFAULT);
@@ -108,9 +108,9 @@ public final class OpcUaChannelDescriptor implements ChannelDescriptor {
         elements.add(opcuaType);
 
         final Tad nodeIdType = new Tad();
-        nodeIdType.setName(NODE_ID_TYPE_PROP_NAME);
+        nodeIdType.setName("%" + NODE_ID_TYPE_PROP_NAME);
         nodeIdType.setId(NODE_ID_TYPE_PROP_NAME);
-        nodeIdType.setDescription(NODE_ID_TYPE_PROP_NAME);
+        nodeIdType.setDescription("%" + NODE_ID_TYPE_PROP_NAME + "Desc");
         nodeIdType.setType(Tscalar.STRING);
         nodeIdType.setRequired(true);
         nodeIdType.setDefault(NODE_ID_TYPE_DEFAULT);
@@ -120,9 +120,9 @@ public final class OpcUaChannelDescriptor implements ChannelDescriptor {
         elements.add(nodeIdType);
 
         final Tad attribute = new Tad();
-        attribute.setName(ATTRIBUTE_PROP_NAME);
+        attribute.setName("%" + ATTRIBUTE_PROP_NAME);
         attribute.setId(ATTRIBUTE_PROP_NAME);
-        attribute.setDescription(ATTRIBUTE_PROP_NAME);
+        attribute.setDescription("%" + ATTRIBUTE_PROP_NAME + "Desc");
         attribute.setType(Tscalar.STRING);
         attribute.setRequired(true);
         attribute.setDefault(ATTRIBUTE_DEFAULT);
@@ -132,9 +132,9 @@ public final class OpcUaChannelDescriptor implements ChannelDescriptor {
         elements.add(attribute);
 
         final Tad samplingInterval = new Tad();
-        samplingInterval.setName(LISTEN_SAMPLING_INTERVAL_PROP_NAME);
+        samplingInterval.setName("%" + LISTEN_SAMPLING_INTERVAL_PROP_NAME);
         samplingInterval.setId(LISTEN_SAMPLING_INTERVAL_PROP_NAME);
-        samplingInterval.setDescription(LISTEN_SAMPLING_INTERVAL_PROP_NAME);
+        samplingInterval.setDescription("%" + LISTEN_SAMPLING_INTERVAL_PROP_NAME + "Desc");
         samplingInterval.setType(Tscalar.DOUBLE);
         samplingInterval.setRequired(true);
         samplingInterval.setDefault(LISTEN_SAMPLING_INTERVAL_DEFAULT);
@@ -142,9 +142,9 @@ public final class OpcUaChannelDescriptor implements ChannelDescriptor {
         elements.add(samplingInterval);
 
         final Tad queueSize = new Tad();
-        queueSize.setName(LISTEN_QUEUE_SIZE_PROP_NAME);
+        queueSize.setName("%" + LISTEN_QUEUE_SIZE_PROP_NAME);
         queueSize.setId(LISTEN_QUEUE_SIZE_PROP_NAME);
-        queueSize.setDescription(LISTEN_QUEUE_SIZE_PROP_NAME);
+        queueSize.setDescription("%" + LISTEN_QUEUE_SIZE_PROP_NAME + "Desc");
         queueSize.setType(Tscalar.LONG);
         queueSize.setRequired(true);
         queueSize.setDefault(LISTEN_QUEUE_SIZE_DEFAULT);
@@ -152,9 +152,9 @@ public final class OpcUaChannelDescriptor implements ChannelDescriptor {
         elements.add(queueSize);
 
         final Tad discardOldest = new Tad();
-        discardOldest.setName(LISTEN_DISCARD_OLDEST_PROP_NAME);
+        discardOldest.setName("%" + LISTEN_DISCARD_OLDEST_PROP_NAME);
         discardOldest.setId(LISTEN_DISCARD_OLDEST_PROP_NAME);
-        discardOldest.setDescription(LISTEN_DISCARD_OLDEST_PROP_NAME);
+        discardOldest.setDescription("%" + LISTEN_DISCARD_OLDEST_PROP_NAME + "Desc");
         discardOldest.setType(Tscalar.BOOLEAN);
         discardOldest.setRequired(true);
         discardOldest.setDefault(LISTEN_DISCARD_OLDEST_DEFAULT);
@@ -162,9 +162,9 @@ public final class OpcUaChannelDescriptor implements ChannelDescriptor {
         elements.add(discardOldest);
 
         final Tad subscribeToChildren = new Tad();
-        subscribeToChildren.setName(LISTEN_SUBSCRIBE_TO_CHILDREN_PROP_NAME);
+        subscribeToChildren.setName("%" + LISTEN_SUBSCRIBE_TO_CHILDREN_PROP_NAME);
         subscribeToChildren.setId(LISTEN_SUBSCRIBE_TO_CHILDREN_PROP_NAME);
-        subscribeToChildren.setDescription(LISTEN_SUBSCRIBE_TO_CHILDREN_PROP_NAME);
+        subscribeToChildren.setDescription("%" + LISTEN_SUBSCRIBE_TO_CHILDREN_PROP_NAME + "Desc");
         subscribeToChildren.setType(Tscalar.BOOLEAN);
         subscribeToChildren.setRequired(true);
         subscribeToChildren.setDefault(LISTEN_SUBSCRIBE_TO_CHILDREN_DEFAULT);

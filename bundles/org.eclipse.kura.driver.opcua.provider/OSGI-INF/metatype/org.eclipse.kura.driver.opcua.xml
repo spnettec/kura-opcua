@@ -14,115 +14,115 @@
 	 Amit Kumar Mondal
 	  
 -->
-<MetaData xmlns="http://www.osgi.org/xmlns/metatype/v1.2.0" localization="en_us">
+<MetaData xmlns="http://www.osgi.org/xmlns/metatype/v1.2.0" localization="OSGI-INF/l10n/OpcUaDriver">
     <OCD id="org.eclipse.kura.driver.opcua" 
-         name="OpcUaDriver" 
-         description="OPC-UA Driver">
+         name="%name" 
+         description="%description">
 
         <AD id="endpoint.ip"
-            name="Endpoint IP"
+            name="%endpointIp"
             type="String"
             cardinality="0"
             required="true"
             default="default-server"
-            description="OPC-UA Endpoint IP Address">
+            description="%endpointIpDesc">
         </AD>
 
         <AD id="endpoint.port"
-            name="Endpoint port"
+            name="%endpointPort"
             type="Integer"
             cardinality="0"
             required="true"
             default="53530"
             min="1"
-            description="OPC-UA Endpoint Port">
+            description="%endpointPortDesc">
         </AD>
         
         <AD id="server.name"
-            name="Server Name"
+            name="%serverName"
             type="String"
             cardinality="0"
             required="false"
             default="OPC-UA-Server"
-            description="OPC-UA Server Name">
+            description="%serverNameDesc">
         </AD>
         
         <AD id="force.endpoint.url"
-            name="Force endpoint URL"
+            name="%forceEndpointUrl"
             type="Boolean"
             cardinality="0"
             required="false"
             default="false"
-            description="If set to true the driver will use the hostname, port, and server name parameters specified in the configuration instead of the values contained in endpoint descriptions fetched from the server.">
+            description="%forceEndpointUrlDesc">
         </AD>
         
         <AD id="session.timeout"
-            name="Session timeout"
+            name="%sessionTimeout"
             type="Integer"
             cardinality="0"
             required="true"
             default="120"
-            description="Session timeout (in seconds)">
+            description="%sessionTimeoutDesc">
         </AD>
         
         <AD id="request.timeout"
-            name="Request timeout"
+            name="%requestTimeout"
             type="Integer"
             cardinality="0"
             required="true"
             default="60"
-            description="Request timeout (in seconds)">
+            description="%requestTimeoutDesc">
         </AD>
         
         <AD id="acknowledge.timeout"
-            name="Acknowledge timeout"
+            name="%acknowledgeTimeout"
             type="Integer"
             cardinality="0"
             required="true"
             default="40"
-            description="The time to wait for the server response to the 'Hello' message (in seconds)">
+            description="%acknowledgeTimeoutDesc">
         </AD>
         
         <AD id="application.name" 
-        	name="Application name" 
+        	name="%applicationName" 
         	type="String"
 			cardinality="0" 
 			required="true" 
 			default="opc-ua client"
-			description="OPC-UA application name" />
+			description="%applicationNameDesc" />
 			
 		<AD id="application.uri" 
-			name="Application URI" 
+			name="%applicationUri" 
 			type="String"
 			cardinality="0" 
 			required="true" 
 			default="urn:kura:opcua:client"
-			description="OPC-UA application uri" />
+			description="%applicationUriDesc" />
 			
 		<AD id="subscription.publish.interval" 
-			name="Subscription publish interval"
+			name="%subscriptionPubInterval"
 			type="Long" 
 			cardinality="0" 
 			required="true" 
 			default="1000"
-			description="The publish interval in milliseconds for the subscription created by the driver.">
+			description="%subscriptionPubIntervalDesc">
 		</AD>
 			
 		<AD id="certificate.location" 
-			name="Keystore path" 
+			name="%keystorePath" 
 			type="String"
 			cardinality="0" 
 			required="true" 
 			default="PFX or JKS Keystore"
-			description="Absolute path of the PKCS or JKS keystore that contains the OPC-UA client certificate, private key and trusted server certificates" />
+			description="%keystorePathDesc" />
 			
 		<AD id="security.policy" 
-			name="Security policy"
+			name="%securityPolicy"
 			type="Integer" 
 			cardinality="0" 
 			required="true" 
 			default="0"
-			description="Security Policy">
+			description="%securityPolicyDesc">
 			<Option label="None" value="0" />
 			<Option label="Basic128Rsa15" value="1" />
 			<Option label="Basic256" value="2" />
@@ -130,74 +130,80 @@
 		</AD>
 		
 		<AD id="username" 
-			name="Username"
+			name="%username"
 			type="String" 
 			cardinality="0" 
 			required="false" 
 			default=""
-			description="OPC-UA server username" />
+			description="%usernameDesc" />
 		
 		<AD id="password" 
-			name="Password"
+			name="%password"
 			type="Password" 
 			cardinality="0" 
 			required="false" 
 			default=""
-			description="OPC-UA server password" />
+			description="%passwordDesc" />
 		
 		<AD id="keystore.client.alias" 
-			name="Client certificate alias" 
+			name="%certAlias" 
 			type="String"
 			cardinality="0" 
 			required="true" 
 			default="client-ai"
-			description="Alias for the client certificate in the keystore" />
+			description="%certAliasDesc" />
 
 		<AD id="authenticate.server" 
-			name="Enable server authentication"
+			name="%enableServerAuth"
 			type="Boolean" 
 			cardinality="0" 
 			required="true" 
-			default="true"
-			description="Specifies whether to enable or not server certificate verification. If set to true, server certificate will be checked to be valid, not expired and trusted according to the certificates currently in the keystore. Server certificate SubjectAlternativeName will also be matched against server application URI. If set to false, no checks will be performed (This should be used for testing purposes only)." />
+			default="false"
+			description="%enableServerAuthDesc" />
 		
 		<AD id="keystore.type" 
-			name="Keystore type"
+			name="%keystoreType"
 			type="String" 
 			cardinality="0" 
 			required="true" 
 			default="PKCS12"
-			description="Keystore type">
+			description="%keystoreTypeDesc">
 			<Option label="PKCS11" value="PKCS11" />
 			<Option label="PKCS12" value="PKCS12" />
 			<Option label="JKS" value="JKS" />
 		</AD>
 
 		<AD id="keystore.password" 
-			name="Keystore password"
+			name="%keystorePassword"
 			type="Password" 
 			cardinality="0" 
 			required="true" 
 			default="password"
-			description="Configurable Property to set keystore password (default set to password)" />
+			description="%keystorePasswordDesc" />
 			
 		<AD id="max.request.items" 
-			name="Max request items"
+			name="%maxReqItems"
 			type="Integer" 
 			cardinality="0" 
 			required="true" 
 			default="200"
-			description="Maximum number of items that will be included in a single request to the server." />
+			description="%maxReqItemsDesc" />
+            
+        <AD id="max.connect.retry" 
+            name="%maxConretry"
+            type="Integer" 
+            cardinality="0" 
+            required="true" 
+            default="10"
+            description="%maxConretryDesc" />
 			
 		<AD id="subtree.subscription.name.format" 
-			name="Subtree subscription events channel name format"
+			name="%subtreeNameFormat"
 			type="String" 
 			cardinality="0" 
 			required="true" 
 			default="BROWSE_PATH"
-			description="The format to be used for channel name for subtree subscriptions. 
-			If set to BROWSE_PATH, the channel name will contain the browse path of the source node relative to the subscription root. 
-			If set to NODE_ID, the name will contain the node id of the source node.">
+			description="%subtreeNameFormatDesc">
 			<Option label="BROWSE_PATH" value="BROWSE_PATH" />
 			<Option label="NODE_ID" value="NODE_ID" />
 		</AD>

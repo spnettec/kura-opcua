@@ -26,9 +26,9 @@ import org.eclipse.kura.KuraException;
 import org.eclipse.kura.configuration.Password;
 import org.eclipse.kura.crypto.CryptoService;
 import org.eclipse.kura.util.base.StringUtil;
-import org.eclipse.milo.opcua.sdk.client.api.identity.AnonymousProvider;
-import org.eclipse.milo.opcua.sdk.client.api.identity.IdentityProvider;
-import org.eclipse.milo.opcua.sdk.client.api.identity.UsernameProvider;
+import org.eclipse.milo.opcua.sdk.client.identity.AnonymousProvider;
+import org.eclipse.milo.opcua.sdk.client.identity.IdentityProvider;
+import org.eclipse.milo.opcua.sdk.client.identity.UsernameProvider;
 import org.eclipse.milo.opcua.stack.core.security.SecurityPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -137,6 +137,8 @@ final class OpcUaOptions {
     private static final String SUBSCRIPTION_PUBLISH_INTERVAL = "subscription.publish.interval";
 
     private static final String MAX_REQUEST_ITEMS = "max.request.items";
+
+    private static final String MAX_CONNECT_RETRY = "max.connect.retry";
 
     private static final String FORCE_ENDPOINT_URL = "force.endpoint.url";
 
@@ -425,6 +427,14 @@ final class OpcUaOptions {
             return (Integer) maxRequestItems;
         }
         return 10;
+    }
+
+    int getMaxConnectRetry() {
+        final Object maxConnectRetry = this.properties.get(MAX_CONNECT_RETRY);
+        if (maxConnectRetry instanceof Integer) {
+            return (Integer) maxConnectRetry;
+        }
+        return 50;
     }
 
     boolean shouldForceEndpointUrl() {
