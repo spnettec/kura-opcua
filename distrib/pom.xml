@@ -235,25 +235,6 @@
                                         <filemode>600</filemode>
                                     </mapper>
                                 </data>
-
-                                <!--
-                                If all the source file are managed in the same way, it is also
-                                possible to specify a 'directory' data type to include all the files
-                                present in the specify path
-                                -->
-                                <!--
-                                <data>
-                                    <src>${project.build.directory}/plugins</src>
-                                    <type>directory</type>
-                                    <mapper>
-                                        <type>perm</type>
-                                        <prefix>${addon.installation.dir}</prefix>
-                                        <user>kurad</user>
-                                        <group>kurad</group>
-                                        <filemode>600</filemode>
-                                    </mapper>
-                                </data>
-                                -->
                             </dataSet>
                         </configuration>
                     </execution>
