@@ -51,7 +51,7 @@
             n => bundle.name:@n;
             ns => bundle.name:@n:start;
         -->
-        <addon.installation.dir>/opt/eclipse/kura/plugins/6s</addon.installation.dir>
+        <addon.installation.dir>/opt/eclipse/kura/siblings/opcua/6s</addon.installation.dir>
 
         <!-- name of the JAR produced in bundles/target -->
         <jar.name>org.eclipse.kura.driver.opcua.provider-2.0.0-SNAPSHOT.jar</jar.name>
