@@ -389,6 +389,7 @@
     </profiles>
 
     <modules>
+        <module>org.eclipse.kura.core.testutil.opcuaserver</module>
         <module>org.eclipse.kura.driver.opcua.test</module>
     </modules>
 
