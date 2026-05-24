@@ -36,6 +36,39 @@
             <artifactId>org.eclipse.kura.driver.opcua.provider</artifactId>
             <version>2.0.0-SNAPSHOT</version>
         </dependency>
+        <!-- Milo client + digitalpetri runtime libs (previously shipped via
+             monorepo kura-core.deb). Drop at level 6 so they resolve before
+             the driver bundle at 6s. -->
+        <dependency>
+            <groupId>org.eclipse.milo</groupId>
+            <artifactId>milo-sdk-client</artifactId>
+            <version>${org.eclipse.milo.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.milo</groupId>
+            <artifactId>milo-sdk-core</artifactId>
+            <version>${org.eclipse.milo.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.milo</groupId>
+            <artifactId>milo-stack-core</artifactId>
+            <version>${org.eclipse.milo.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.milo</groupId>
+            <artifactId>milo-transport</artifactId>
+            <version>${org.eclipse.milo.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.digitalpetri.fsm</groupId>
+            <artifactId>strict-machine</artifactId>
+            <version>${com.digitalpetri.strict-machine.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.digitalpetri.netty</groupId>
+            <artifactId>netty-channel-fsm</artifactId>
+            <version>${com.digitalpetri.channel-fsm.version}</version>
+        </dependency>
     </dependencies>
 
     <!-- Change this if your org is different -->
@@ -52,9 +85,15 @@
             ns => bundle.name:@n:start;
         -->
         <addon.installation.dir>/opt/eclipse/kura/siblings/opcua/6s</addon.installation.dir>
+        <addon.installation.dir.level6>/opt/eclipse/kura/siblings/opcua/6</addon.installation.dir.level6>
 
         <!-- name of the JAR produced in bundles/target -->
         <jar.name>org.eclipse.kura.driver.opcua.provider-2.0.0-SNAPSHOT.jar</jar.name>
+
+        <!-- Milo + digitalpetri versions (mirror target-platform/pom.xml). -->
+        <org.eclipse.milo.version>1.1.2</org.eclipse.milo.version>
+        <com.digitalpetri.strict-machine.version>1.0.0</com.digitalpetri.strict-machine.version>
+        <com.digitalpetri.channel-fsm.version>1.0.2</com.digitalpetri.channel-fsm.version>
 
         <!--
             Available DEB architectures:
@@ -184,16 +223,31 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>get-bundles-to-distrib</id>
+                        <id>fetch-driver-bundle</id>
                         <phase>generate-resources</phase>
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
+                            <includeArtifactIds>org.eclipse.kura.driver.opcua.provider</includeArtifactIds>
                             <excludeTypes>pom</excludeTypes>
                             <excludeClassifiers>sources</excludeClassifiers>
                             <excludeTransitive>true</excludeTransitive>
-                            <outputDirectory>${project.build.directory}/plugins</outputDirectory>
+                            <outputDirectory>${project.build.directory}/plugins_6s</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>fetch-runtime-libs</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>milo-sdk-client,milo-sdk-core,milo-stack-core,milo-transport,strict-machine,netty-channel-fsm</includeArtifactIds>
+                            <excludeTypes>pom</excludeTypes>
+                            <excludeClassifiers>sources,javadoc</excludeClassifiers>
+                            <excludeTransitive>true</excludeTransitive>
+                            <outputDirectory>${project.build.directory}/plugins_6</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -225,11 +279,22 @@
                                 different destination location) or specific user, group and filemode
                                 -->
                                 <data>
-                                    <src>${project.build.directory}/plugins/${jar.name}</src>
+                                    <src>${project.build.directory}/plugins_6s/${jar.name}</src>
                                     <type>file</type>
                                     <mapper>
                                         <type>perm</type>
                                         <prefix>${addon.installation.dir}</prefix>
+                                        <user>kurad</user>
+                                        <group>kurad</group>
+                                        <filemode>600</filemode>
+                                    </mapper>
+                                </data>
+                                <data>
+                                    <src>${project.build.directory}/plugins_6</src>
+                                    <type>directory</type>
+                                    <mapper>
+                                        <type>perm</type>
+                                        <prefix>${addon.installation.dir.level6}</prefix>
                                         <user>kurad</user>
                                         <group>kurad</group>
                                         <filemode>600</filemode>
