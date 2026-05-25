@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (c) 2026 Eurotech and/or its affiliates and others
+    Copyright (c) 2026 YOFC
+
+    This program and the accompanying materials are made
+    available under the terms of the Eclipse Public License 2.0
+    which is available at https://www.eclipse.org/legal/epl-2.0/
+
+    SPDX-License-Identifier: EPL-2.0
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.eclipse.kura</groupId>
+    <artifactId>kura-opcua-pde-deps</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+    <name>Kura OPC-UA PDE Deps</name>
+
+    <!-- Eclipse-IDE-only delta: developers add this pom as a Maven Artifact
+         Target Entry on top of the monorepo target so org.eclipse.milo.*
+         and com.digitalpetri.* imports resolve. The Tycho build resolves
+         these via target-definition/kura-opcua.target instead.
+
+         These are p2.osgi.bundle GAVs produced by kura-opcua/target-platform
+         (reficio wraps the non-OSGi maven jars into OSGi bundles, then
+         install-to-m2.sh stages them under ~/.m2/p2/osgi/bundle/).
+         One-time setup per fresh ~/.m2:
+             mvn -f kura-opcua/target-platform/pom.xml install
+    -->
+    <dependencies>
+        <dependency>
+            <groupId>p2.osgi.bundle</groupId>
+            <artifactId>org.eclipse.milo.sdk-client</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>p2.osgi.bundle</groupId>
+            <artifactId>org.eclipse.milo.sdk-core</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>p2.osgi.bundle</groupId>
+            <artifactId>org.eclipse.milo.stack-core</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>p2.osgi.bundle</groupId>
+            <artifactId>org.eclipse.milo.transport</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>p2.osgi.bundle</groupId>
+            <artifactId>com.digitalpetri.fsm.strict-machine</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>p2.osgi.bundle</groupId>
+            <artifactId>com.digitalpetri.netty.channel-fsm</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <configuration>
+                    <skip>false</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

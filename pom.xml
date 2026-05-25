@@ -39,8 +39,8 @@
     <modules>
         <module>target-platform</module>
         <module>target-definition</module>
+        <module>kura-opcua-pde-deps</module>
         <module>bundles</module>
         <module>distrib</module>
-        <module>tests</module>
     </modules>
 </project>
