@@ -42,5 +42,6 @@
         <module>kura-opcua-pde-deps</module>
         <module>bundles</module>
         <module>distrib</module>
+        <module>dp</module>
     </modules>
 </project>
