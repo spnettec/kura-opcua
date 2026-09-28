@@ -44,3 +44,4 @@ Require-Bundle: org.eclipse.milo.sdk-client,
  org.eclipse.milo.stack-core,
  org.eclipse.milo.transport,
  org.eclipse.milo.sdk-core
+Bundle-RequiredExecutionEnvironment: JavaSE-21
