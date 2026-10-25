@@ -9,12 +9,8 @@
 
     SPDX-License-Identifier: EPL-2.0
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <!--
         Aggregator for kura-opcua's local target-platform deps. p2-repo-opcua-deps converts
         non-OSGi maven jars (milo, netty, guava, bouncycastle, jakarta) to P2 bundles via
@@ -26,11 +22,9 @@
     <version>2.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>kura-opcua target platform</name>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <p2-maven-plugin.version>2.1.0</p2-maven-plugin.version>
-
         <!-- Versions for kura-opcua-exclusive deps. Versions for shared deps
              (netty, guava, bouncycastle, jakarta) are pinned by monorepo's
              target-platform-pde-deps and consumed via Maven location. -->
@@ -38,8 +32,8 @@
         <com.digitalpetri.strict-machine.version>1.0.0</com.digitalpetri.strict-machine.version>
         <com.digitalpetri.channel-fsm.version>1.0.2</com.digitalpetri.channel-fsm.version>
     </properties>
-
     <modules>
         <module>p2-repo-opcua-deps</module>
     </modules>
 </project>
+

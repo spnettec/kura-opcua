@@ -13,22 +13,16 @@
      Eurotech
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>org.eclipse.kura</groupId>
         <artifactId>kura-opcua.parent</artifactId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../bundles/pom.xml</relativePath>
     </parent>
-
     <artifactId>kura-opcua.distrib</artifactId>
     <packaging>pom</packaging>
-
     <!-- Insert your bundles as dependencies -->
     <dependencies>
         <dependency>
@@ -70,15 +64,12 @@
             <version>${com.digitalpetri.channel-fsm.version}</version>
         </dependency>
     </dependencies>
-
     <!-- Change this if your org is different -->
     <organization>
         <name>Eclipse Kura</name>
         <url>https://eclipse.dev/kura/</url>
     </organization>
-
     <properties>
-    	
         <!--
             With n being the start level, config.ini will be populated depending on which plugins directory the bundle is put:
             n => bundle.name:@n;
@@ -86,33 +77,26 @@
         -->
         <addon.installation.dir>/opt/eclipse/kura/siblings/opcua/6s</addon.installation.dir>
         <addon.installation.dir.level6>/opt/eclipse/kura/siblings/opcua/6</addon.installation.dir.level6>
-
         <!-- name of the JAR produced in bundles/target -->
         <jar.name>org.eclipse.kura.driver.opcua.provider-2.0.0-SNAPSHOT.jar</jar.name>
-
         <!-- Milo + digitalpetri versions (mirror target-platform/pom.xml). -->
         <org.eclipse.milo.version>1.1.2</org.eclipse.milo.version>
         <com.digitalpetri.strict-machine.version>1.0.0</com.digitalpetri.strict-machine.version>
         <com.digitalpetri.channel-fsm.version>1.0.2</com.digitalpetri.channel-fsm.version>
-
         <!--
             Available DEB architectures:
             all, amd64, arm64
         -->
         <deb.architecture>all</deb.architecture>
-
         <!-- final name of the generated debian package -->
         <package.name>kura-opcua</package.name>
-
         <!-- properties used for artifact upload on artifactory repository -->
         <kura.repo.distribution>kura-6</kura.repo.distribution>
         <kura.repo.module>base</kura.repo.module>
-
         <!-- edit following fields and file deb/control/control -->
         <summary>Eclipse Kura OPC UA Client Addon</summary>
         <long.description>The Eclipse Kura OPC UA Driver implements an OPC UA client, enabling interaction with servers through the Wires framework, the Asset model, or directly via the Driver.</long.description>
     </properties>
-
     <profiles>
         <!-- Internal profile: FOR INTERNAL USE ONLY - active if -DreleaseBuild is *not* specified. -->
         <profile>
@@ -125,7 +109,6 @@
             <properties>
                 <maven.build.timestamp.format>yyyyMMddHHmm</maven.build.timestamp.format>
                 <package.snapshot>git${maven.build.timestamp}.${git.commit.id.abbrev}</package.snapshot>
-
                 <package.version>${release.version}~${package.snapshot}</package.version>
                 <package.revision>1</package.revision>
             </properties>
@@ -169,7 +152,6 @@
             </build>
         </profile>
     </profiles>
-
     <build>
         <plugins>
             <!-- Responsible for removing the "-SNAPSHOT" from the project.version -->
@@ -187,13 +169,12 @@
                             <name>release.version</name>
                             <value>${project.version}</value>
                             <regex>-SNAPSHOT</regex>
-                            <replacement></replacement>
+                            <replacement />
                             <failIfNoMatch>false</failIfNoMatch>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-
             <!-- Responsible for retrieving the short git commit (defaults to length 7) -->
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
@@ -217,7 +198,6 @@
                     </includeOnlyProperties>
                 </configuration>
             </plugin>
-            
             <!-- Responsible for copying the dependencies into a known location -->
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -252,7 +232,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.vafer</groupId>
                 <artifactId>jdeb</artifactId>
@@ -328,7 +307,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 </project>
