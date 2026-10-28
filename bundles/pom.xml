@@ -147,6 +147,7 @@
         </repository>
     </repositories>
     <modules>
+        <module>org.eclipse.kura.opcua.fsm</module>
         <module>org.eclipse.kura.driver.opcua.provider</module>
     </modules>
 </project>
